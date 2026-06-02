@@ -1,61 +1,92 @@
-# ai-trading-bots
+Here is a clean, comprehensive, and raw README.md file based on the ai-trading-bots repository. It is formatted in a markdown code block so you can easily copy and paste it directly into your project.
+Markdown
 
-Here is a complete, production-ready README.md file tailored for an AI-Trading Bot system. It implements a decoupled architecture utilizing a React frontend, a GraphQL API layer, an Model Context Protocol (MCP) Server for executing actions, and an MCP Client for orchestrating the AI agent logic.
-# AI-Trading Bot with React, GraphQL, and Robinhood MCP
+# AI Trading Bots
 
-An autonomous, AI-driven trading assistant and dashboard built on top of the Model Context Protocol (MCP). This system decouples the AI Agent orchestrator from execution environments, utilizing a React frontend for data visualization, a GraphQL layer for real-time state streaming, and an MCP architecture to securely interact with the Robinhood API for portfolio monitoring and algorithmic trade execution.
-## Architecture Overview
+A comprehensive collection of AI-driven algorithmic trading bots designed to analyze market data, predict price movements, and execute automated trades. This repository leverages machine learning models, deep learning frameworks, and quantitative financial strategies to navigate volatile asset markets.
 
-The system is separated into four core layers designed to provide asynchronous, safe, and highly observable algorithmic trading:
+---
 
-┌────────────────────────────────────────────────────────┐
-│                   React Frontend                       │
-│  (Real-time Dashboard, Charts, Trade Confirmation)    │
-└───────────────────────────┬────────────────────────────┘
-                            │  GraphQL (Queries/Mutations & WebSockets)
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│               GraphQL Gateway API Server               │
-│     (State persistence, User auth, Session Cache)      │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                   MCP Client Wrapper                   │
-│ (LLM Orchestration, Strategy Logic, Context Assembly)  │
-└───────────────────────────┬────────────────────────────┘
-                            │  MCP Protocol (JSON-RPC over stdio/SSE)
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│             Robinhood MCP Execution Server             │
-│   (Stateful Execution, MFA Handling, API Protections) │
-└────────────────────────────────────────────────────────┘
+## 🚀 Key Features
 
-    React Frontend: A componentized, responsive dashboard utilizing TailwindCSS and Recharts to view portfolio performance, token balances, and live trade signals emitted by the bot.
+* **Multi-Model Architecture:** Implements a variety of AI models including LSTM (Long Short-Term Memory), Reinforcement Learning (RL), and transformer-based architectures for financial time-series forecasting.
+* **Backtesting Engine:** Built-in historical data backtesting to validate trading strategies, manage risk metrics, and calculate Sharpe/Sortino ratios before live deployment.
+* **Real-Time Data Integration:** Seamless APIs hooks for popular data providers and brokerages (e.g., Binance, Alpaca, Yahoo Finance) to fetch live market order books and historical OHLCV data.
+* **Risk Management:** Automated stop-loss, take-profit, and dynamic position sizing algorithms to protect capital and minimize drawdowns.
 
-    GraphQL Gateway: An Apollo Server instance that acts as the data broker. It handles client subscriptions for execution streams and pipes mutations down to the MCP ecosystem.
+---
 
-    MCP Client: The core cognitive engine (e.g., powered by Claude/Gemini via an LLM Orchestration SDK) that processes financial market data, reads strategy rules, and constructs tools requests.
+## 🛠️ Tech Stack
 
-    Robinhood MCP Server: A specialized execution server using tools like fastmcp or robinhood-for-agents to securely perform actions (fetching positions, streaming option chains, executing equity orders).
+* **Language:** Python 3.9+
+* **Machine Learning / Deep Learning:** TensorFlow, PyTorch, Scikit-Learn
+* **Data Analysis:** Pandas, NumPy, TA-Lib (Technical Analysis Library)
+* **Trading & APIs:** Alpaca Trade API, Binance API, WebSockets
 
-## Core Features
+---
 
-    Decoupled Intelligence: The AI agent logic remains entirely isolated from raw API credentials via standardized MCP tool structures.
+## 📦 Installation & Setup
 
-    Real-time Streaming: Subscriptions via GraphQL WebSockets for live portfolio valuations, position changes, and agent reasoning logs.
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/songvc/ai-trading-bots.git](https://github.com/songvc/ai-trading-bots.git)
+cd ai-trading-bots
 
-    Secure Authentication: Native integration with Robinhood's multi-factor authentication (MFA/TOTP) handled statefully by the MCP Server layer.
+2. Set Up a Virtual Environment
+Bash
 
-    Safety Guardrails: Restricted endpoints by design (e.g., automated blocking of outbound wire transfers or accidental bulk-option liquidations).
+python3 -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-## Tech Stack
+3. Install Dependencies
+Bash
 
-    Frontend: React 19, TypeScript, Apollo Client, TailwindCSS, Recharts
+pip install -r requirements.txt
 
-    API Gateway: Node.js, GraphQL (Apollo Server), GraphQL Subscriptions
+4. Configure Environment Variables
 
-    AI Engine (MCP Client): TypeScript/Python MCP SDK, OpenAI/Anthropic/Gemini SDKs
+Create a .env file in the root directory and add your API keys:
+Code snippet
 
-    Execution (MCP Server): Python (fastmcp + robin_stocks) or Bun (robinhood-for-agents via Playwright token interception)
+API_KEY=your_brokerage_api_key
+API_SECRET=your_brokerage_api_secret
+PAPER_TRADING=True
 
+📈 Usage
+Running a Backtest
+
+To test an AI strategy against historical data, run:
+Bash
+
+python main.py --mode backtest --strategy lstm --symbol BTC/USDT
+
+Deploying Paper Trading
+
+To run the bot in a simulated live environment using real-time data:
+Bash
+
+python main.py --mode paper --strategy reinforcement_learning --symbol AAPL
+
+📂 Repository Structure
+Plaintext
+
+├── data/               # Historical market data storage
+├── models/             # Pre-trained ML/DL model checkpoints
+├── src/
+│   ├── agents/         # AI trading strategies (RL, LSTM, etc.)
+│   ├── execution/      # Order routing and broker API integrations
+│   ├── indicators/     # Custom technical indicators and feature engineering
+│   └── utils/          # Logger, data parsers, and helpers
+├── tests/              # Unit tests for core trading logic
+├── main.py             # Main entry point for running bots
+└── requirements.txt    # Python dependencies
+
+⚠️ Disclaimer
+
+This repository is for educational and research purposes only. Algorithmic trading carries substantial financial risk. Past performance does not guarantee future results. Do not risk money you cannot afford to lose. The maintainers are not responsible for any financial losses incurred through the use of this software.
+📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+By the way, to unlock the full functionality of all Apps, enable [Gemini Apps Activity](https://myactivity.google.com/product/gemini).
