@@ -1,0 +1,11 @@
+{
+  "name": "robinhood-mcp-app",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build:all": "npm run build --workspace=apps/mcp-server && npm run build --workspace=apps/graphql-bff",
+    "start": "npm run build:all && npm run start --workspace=apps/graphql-bff"
+  }
+}
