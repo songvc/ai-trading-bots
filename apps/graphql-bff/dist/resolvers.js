@@ -1,15 +1,4 @@
-import { getMcpClient } from "./mcp-client.js";
-function extractTextFromMcpResponse(response) {
-    if (Array.isArray(response.content) &&
-        response.content.length > 0 &&
-        typeof response.content[0] === "object" &&
-        response.content[0] !== null &&
-        "text" in response.content[0] &&
-        typeof response.content[0].text === "string") {
-        return response.content[0].text;
-    }
-    throw new Error("Invalid MCP response: expected content[0].text to be a string");
-}
+import { getMcpClient, extractTextFromMcpResponse } from "./mcp-client.js";
 export const resolvers = {
     Query: {
         getStockQuote: async (_, { ticker }) => {
@@ -42,7 +31,7 @@ export const resolvers = {
                         side: side.toLowerCase()
                     }
                 });
-                const text = extractTextFromMcpResponse(mcpResponse);
+                const confirmationText = extractTextFromMcpResponse(mcpResponse);
                 return {
                     success: true,
                     message: confirmationText

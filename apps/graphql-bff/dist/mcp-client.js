@@ -45,4 +45,21 @@ export async function closeMcpClient() {
         mcpClient = null;
     }
 }
+/**
+ * Type guard to safely extract text from MCP response
+ * @param response - The raw MCP response
+ * @returns The extracted text string
+ * @throws Error if response format is invalid
+ */
+export function extractTextFromMcpResponse(response) {
+    if (Array.isArray(response.content) &&
+        response.content.length > 0 &&
+        typeof response.content[0] === "object" &&
+        response.content[0] !== null &&
+        "text" in response.content[0] &&
+        typeof response.content[0].text === "string") {
+        return response.content[0].text;
+    }
+    throw new Error("Invalid MCP response: expected content[0].text to be a string");
+}
 //# sourceMappingURL=mcp-client.js.map

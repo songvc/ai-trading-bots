@@ -39,7 +39,6 @@ export const resolvers = {
         });
 
         const confirmationText = extractTextFromMcpResponse(mcpResponse as McpResponse);
-
         return {
           success: true,
           message: confirmationText
