@@ -1,10 +1,6 @@
-import { useState } from 'react'
-import React, { useState } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client/react';
+import { gql } from '@apollo/client';
 
 const GET_QUOTE = gql`
   query GetStockQuote($ticker: String!) {
@@ -24,10 +20,27 @@ const PLACE_TRADE = gql`
   }
 `;
 
-export function RobinhoodDashboard() {
+
+interface StockQuote {
+  getStockQuote: {
+    ticker: string;
+    price: number;
+  };
+}
+
+interface TradeResult {
+  placeTrade: {
+    success: boolean;
+    message: string;
+  };
+}
+
+
+export default function RobinhoodDashboard() {
+
   const [ticker, setTicker] = useState('AAPL');
-  const { loading, error, data, refetch } = useQuery(GET_QUOTE, { variables: { ticker } });
-  const [executeTrade, { data: tradeData }] = useMutation(PLACE_TRADE);
+  const { loading, error, data, refetch } = useQuery<StockQuote>(GET_QUOTE, { variables: { ticker } });
+  const [executeTrade, { data: tradeData }] = useMutation<TradeResult>(PLACE_TRADE);
 
   const handleBuy = async () => {
     await executeTrade({
@@ -36,39 +49,55 @@ export function RobinhoodDashboard() {
   };
 
   return (
-    <div style={{ padding: '24px', fontFamily: 'sans-serif' }}>
-      <h2>Robinhood AI Agent Dashboard (MCP)</h2>
+    <div style={{ padding: '32px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+      <header style={{ borderBottom: '1px solid #eee', paddingBottom: '16px', marginBottom: '24px' }}>
+        <h1 style={{ color: '#00c805', margin: 0 }}>Robinhood AI Dashboard</h1>
+        <p style={{ color: '#666', margin: '4px 0 0 0' }}>Model Context Protocol (MCP) Interface</p>
+      </header>
       
-      <div style={{ marginBottom: '16px' }}>
-        <input 
-          value={ticker} 
-          onChange={(e) => setTicker(e.target.value.toUpperCase())} 
-          placeholder="Enter Ticker (e.g. NVDA)" 
-        />
-        <button onClick={() => refetch()}>Get Live MCP Quote</button>
-      </div>
-
-      {loading && <p>Fetching via MCP Client...</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
-      
-      {data && (
-        <div style={{ border: '1px solid #ccc', padding: '16px', borderRadius: '8px' }}>
-          <h3>{data.getStockQuote.ticker}</h3>
-          <p>Price: <strong>${data.getStockQuote.price}</strong></p>
+      <main>
+        <div style={{ marginBottom: '24px', display: 'flex', gap: '8px' }}>
+          <input 
+            value={ticker} 
+            onChange={(e) => setTicker(e.target.value.toUpperCase())} 
+            placeholder="Ticker (e.g. TSLA)" 
+            style={{ padding: '10px', fontSize: '16px', borderRadius: '6px', border: '1px solid #ccc', flex: 1 }}
+          />
           <button 
-            onClick={handleBuy} 
-            style={{ backgroundColor: '#00c805', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+            onClick={() => refetch()}
+            style={{ padding: '10px 20px', fontSize: '16px', borderRadius: '6px', border: 'none', backgroundColor: '#111', color: '#fff', cursor: 'pointer' }}
           >
-            Market Buy 1 Share
+            Fetch Quote
           </button>
         </div>
-      )}
 
-      {tradeData && (
-        <div style={{ marginTop: '16px', color: 'green' }}>
-          <strong>Status:</strong> {tradeData.placeTrade.message}
-        </div>
-      )}
+        {loading && <p>Fetching via MCP...</p>}
+        {error && <p style={{ color: '#ff3b30' }}>Error: {error.message}</p>}
+        
+        {data && (
+          <div style={{ border: '1px solid #eaeaea', padding: '24px', borderRadius: '12px', backgroundColor: '#fafafa' }}>
+            <h2 style={{ margin: '0 0 8px 0' }}>{data.getStockQuote.ticker}</h2>
+            <p style={{ fontSize: '32px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
+              ${data.getStockQuote.price.toFixed(2)}
+            </p>
+            
+            <button 
+              onClick={handleBuy} 
+              style={{ 
+                backgroundColor: '#00c805', color: '#fff', border: 'none', padding: '12px 24px', 
+                fontSize: '16px', fontWeight: 'bold', borderRadius: '6px', cursor: 'pointer', width: '100%'
+              }}
+            >
+            </button>
+          </div>
+        )}
+
+        {tradeData && (
+          <div style={{ marginTop: '20px', padding: '14px', borderRadius: '6px', backgroundColor: '#e6f9e6', color: '#008003' }}>
+            <strong>Status:</strong> {tradeData.placeTrade.message}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

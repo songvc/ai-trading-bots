@@ -1,22 +1,23 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { RobinhoodDashboard } from './App';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
+import RobinhoodDashboard from './App';
 import './index.css';
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
 
 // Connect Apollo Client to your GraphQL BFF
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql', 
+  link: new HttpLink({
+    uri: 'http://localhost:4000/graphql',
+    credentials: 'include', // Include cookies if needed
+  }),
   cache: new InMemoryCache(),
 });
 
-createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ApolloProvider client={client}>
       <RobinhoodDashboard />
     </ApolloProvider>
   </StrictMode>,
-)
+);
