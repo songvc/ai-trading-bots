@@ -1,0 +1,20 @@
+export const typeDefs = `
+  type StockQuote {
+    ticker: String!
+    price: Float!
+  }
+
+  type TradeResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type Query {
+    getStockQuote(ticker: String!): StockQuote!
+  }
+
+  type Mutation {
+    placeTrade(ticker: String!, quantity: Float!, side: String!): TradeResponse!
+  }
+`;
+
