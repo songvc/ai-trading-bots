@@ -1,5 +1,3 @@
-Here is a clean, comprehensive, and raw README.md file based on the ai-trading-bots repository. It is formatted in a markdown code block so you can easily copy and paste it directly into your project.
-Markdown
 
 # AI Trading Bots
 
